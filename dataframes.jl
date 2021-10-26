@@ -5,7 +5,7 @@ using DataFrames, Random, BenchmarkTools, OnlineStats, Dates
 if length(ARGS) != 4
     n = 1_000_000
     max_chunksize = 0
-    unique_values = 1_000
+    unique_values = Int32(1_000)
     ncolumns = 4
 else
     n = tryparse(Int, ARGS[1])

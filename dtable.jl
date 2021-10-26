@@ -5,12 +5,12 @@ using Dagger, Random, BenchmarkTools, OnlineStats, Dates
 if length(ARGS) != 4
     n = 400_000_000
     max_chunksize = 1_000_000
-    unique_values = 10_00
+    unique_values = Int32(10_00)
     ncolumns = 4
 else
     n = tryparse(Int, ARGS[1])
     max_chunksize = tryparse(Int, ARGS[2])
-    unique_values = tryparse(Int, ARGS[3])
+    unique_values = tryparse(Int32, ARGS[3])
     ncolumns = tryparse(Int, ARGS[4])
 end
 
@@ -23,15 +23,26 @@ Dagger.@spawn 10+10
 # create
 
 rng = MersenneTwister(1111)
-d = DTable((;[Symbol("a$i") => abs.(rand(rng, Int32, n)) .% unique_values for i in 1:ncolumns]...), max_chunksize)
+data = (;[Symbol("a$i") => abs.(rand(rng, Int32, n)) .% unique_values for i in 1:ncolumns]...)
+d = DTable(data, max_chunksize)
+data = nothing
 
 filename = "dtable_bench" * string(round(Int, Dates.datetime2unix(now()))) * ".csv"
 file = open(filename, "w")
 println("saving results to $filename")
 write(file, "tech,type,n,chunksize,unique_vals,ncolumns,time,gctime,memory,allocs\n")
 
+_gc = () -> begin
+    for i in 1:10
+        Dagger.@spawn 10+10
+    end
+    for i in 1:4
+        GC.gc()
+    end
+end
+
 run_bench = (f, arg) -> begin
-    @benchmark $f($arg) samples=2 evals=1 gcsample=true
+    @benchmark $f($arg) samples=1 evals=1 gcsample=true
 end
 
 w_test = (type, f, arg) -> begin
@@ -90,10 +101,12 @@ w_test("groupby_single_col", groupby_single_col, d)
 
 ################
 # grouped prep
-d = nothing
-rng = MersenneTwister(1111)
-g = Dagger.groupby(DTable((;[Symbol("a$i") => abs.(rand(rng, Int32, n)) .% unique_values for i in 1:ncolumns]...), max_chunksize), :a1)
 
+rng = MersenneTwister(1111)
+g = Dagger.groupby(d, :a1)
+d = nothing
+Dagger.@spawn 10+10
+Dagger.@spawn 10+10
 GC.gc();GC.gc();
 ################
 

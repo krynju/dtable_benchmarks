@@ -12,11 +12,16 @@ client = Client(n_workers=1, threads_per_worker=16, processes=False, memory_limi
 client.restart()
 
 
-
 n = int(sys.argv[1])
 max_chunksize = int(sys.argv[2])
 unique_values = int(sys.argv[3])
 ncolumns = int(sys.argv[4])
+
+
+# n = 100000000
+# max_chunksize = 1000000
+# unique_values = 1000
+# ncolumns = 4
 
 
 x = da.random.randint(0, unique_values, size=(int(n), ncolumns), chunks=(max_chunksize, ncolumns))
@@ -41,23 +46,23 @@ x = None
 
 
 
-
 runb('increment_map', lambda : wait((df[0] + 1).persist()))
 
-#filter half missing
+runb('filter_half', lambda : df[df[0] < unique_values /2].compute())
 
 runb('reduce_var_all', lambda : df.var().compute())
 
 runb('reduce_var_single', lambda : df[0].var().compute())
 
-runb('groupby_reduce_mean_all', lambda : df.shuffle(0, shuffle='tasks').groupby(0).mean().compute())
+runb('groupby_reduce_mean_all', lambda : df.shuffle(0, shuffle='tasks', npartitions=unique_values).groupby(0).mean().compute())
 
-runb('groupby_single_col', lambda : wait(df.shuffle(0, shuffle='tasks').persist()))
+runb('groupby_single_col', lambda : wait(df.shuffle(0, shuffle='tasks', npartitions=unique_values).persist()))
 
 
 
-gf = df.shuffle(0, shuffle='tasks').persist()
+gf = df.shuffle(0, shuffle='tasks', npartitions=unique_values).persist()
 df = None
+wait(gf)
 
 runb('grouped_reduce_mean_singlecol', lambda : gf.groupby(0)[1].mean().compute())
 runb('grouped_reduce_mean_allcols', lambda : gf.groupby(0).mean().compute())
