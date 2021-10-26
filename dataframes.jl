@@ -10,7 +10,7 @@ if length(ARGS) != 4
 else
     n = tryparse(Int, ARGS[1])
     max_chunksize = tryparse(Int, ARGS[2])
-    unique_values = tryparse(Int, ARGS[3])
+    unique_values = tryparse(Int32, ARGS[3])
     ncolumns = tryparse(Int, ARGS[4])
 end
 
