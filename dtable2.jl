@@ -42,7 +42,7 @@ _gc = () -> begin
 end
 
 run_bench = (f, arg) -> begin
-    @benchmark $f($arg) samples=1 evals=1 gcsample=true
+    @benchmark $f($arg) samples=2 evals=1 gcsample=true
 end
 
 w_test = (type, f, arg) -> begin
@@ -51,63 +51,21 @@ w_test = (type, f, arg) -> begin
     s = "dtable,$type,$n,$max_chunksize,$unique_values,$ncolumns,$(m.time),$(m.gctime),$(m.memory),$(m.allocs)\n"
     write(file, s)
     flush(file)
+    _gc()
     println("done $type")
 end
 
-
-fmap = (d) -> begin
-    m = map(row -> (r = row.a1 + 1,), d)
-    wait.(m.chunks)
-end
-w_test("increment_map", fmap, d)
-
-ffilter = (d) -> begin
-    f = filter(row -> row.a1 < unique_values ÷ 2, d)
-    wait.(f.chunks)
-end
-w_test("filter_half", ffilter, d)
-
-
-fredall = (d) -> begin
-    r = reduce(fit!, d, init=Variance())
-    fetch(r)
-end
-w_test("reduce_var_all", fredall, d)
-
-
-fredsingle = (d) -> begin
-    r = reduce(fit!, d, cols=[:a1], init=Variance())
-    fetch(r)
-end
-w_test("reduce_var_single", fredsingle, d)
-
-
-
-groupby_reduce_mean_all = (d) -> begin
-    _g = Dagger.groupby(d, :a1)
-    r = reduce(fit!, _g, init=Mean())
-    fetch(r)
-end
-w_test("groupby_reduce_mean_all", groupby_reduce_mean_all, d)
-
-
-
-groupby_single_col = (d) -> begin
-    g = Dagger.groupby(d, :a1)
-    (x -> x isa Dagger.EagerThunk && wait(x)).(g.dtable.chunks)
-end
-w_test("groupby_single_col", groupby_single_col, d)
-
-
 ################
 # grouped prep
-
+_gc()
 rng = MersenneTwister(1111)
 g = Dagger.groupby(d, :a1)
 d = nothing
+_gc()
 Dagger.@spawn 10+10
 Dagger.@spawn 10+10
 GC.gc();GC.gc();
+_gc()
 ################
 
 

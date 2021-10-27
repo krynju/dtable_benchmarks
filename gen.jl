@@ -35,10 +35,12 @@ for k in keys(d2)
             s.n,
             s.time./1e9,
             xscale=:log10,
+            # yscale=:log10,
             title=name,
             label=t,
             xlabel="n - single column length [Int32]",
-            ylabel="time [s]"
+            ylabel="time [s]",
+            legend=:topleft
             )
     end
     savefig("plots/"*name*".png")
