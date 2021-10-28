@@ -3,8 +3,8 @@ using Dagger, Random, BenchmarkTools, OnlineStats, Dates
 
 
 if length(ARGS) != 4
-    n = 400_000_000
-    max_chunksize = 1_000_000
+    n = 1_000_000_000
+    max_chunksize = 10_000_000
     unique_values = Int32(10_00)
     ncolumns = 4
 else
@@ -41,12 +41,12 @@ _gc = () -> begin
     end
 end
 
-run_bench = (f, arg) -> begin
-    @benchmark $f($arg) samples=2 evals=1 gcsample=true
+run_bench = (f, arg, s) -> begin
+    @benchmark $f($arg) samples=s evals=1 gcsample=true
 end
 
-w_test = (type, f, arg) -> begin
-    b = run_bench(f, arg)
+w_test = (type, f, arg; s=2) -> begin
+    b = run_bench(f, arg, s)
     m = minimum(b)
     s = "dtable,$type,$n,$max_chunksize,$unique_values,$ncolumns,$(m.time),$(m.gctime),$(m.memory),$(m.allocs)\n"
     write(file, s)
@@ -89,7 +89,7 @@ groupby_reduce_mean_all = (d) -> begin
     r = reduce(fit!, _g, init=Mean())
     fetch(r)
 end
-w_test("groupby_reduce_mean_all", groupby_reduce_mean_all, d)
+w_test("groupby_reduce_mean_all", groupby_reduce_mean_all, d, s=1)
 
 _gc()
 

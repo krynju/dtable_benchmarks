@@ -41,12 +41,12 @@ _gc = () -> begin
     end
 end
 
-run_bench = (f, arg) -> begin
-    @benchmark $f($arg) samples=2 evals=1 gcsample=true
+run_bench = (f, arg, s) -> begin
+    @benchmark $f($arg) samples=s evals=1 gcsample=true
 end
 
-w_test = (type, f, arg) -> begin
-    b = run_bench(f, arg)
+w_test = (type, f, arg; s=2) -> begin
+    b = run_bench(f, arg, s)
     m = minimum(b)
     s = "dtable,$type,$n,$max_chunksize,$unique_values,$ncolumns,$(m.time),$(m.gctime),$(m.memory),$(m.allocs)\n"
     write(file, s)

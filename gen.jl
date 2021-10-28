@@ -16,6 +16,7 @@ d = vcat(d[d.tech .!= "dataframesjl", :], a)
 # d = DataFrame(t)
 sort!(d, :time)
 d1 = combine(groupby(d, 1:6), first)
+sort!(d1, :n)
 
 d2 = groupby(d1, [2,4,5,6])
 
@@ -26,7 +27,7 @@ for k in keys(d2)
 
     p = d2[k]
     x = unique(p.n)
-    techs = combine(p, :tech => unique).tech_unique
+    techs = sort(combine(p, :tech => unique).tech_unique)
     ys = [p[p.tech .== t, [:n, :time]] for t in techs]
     plot()
     for (i, t) in enumerate(techs)
@@ -35,12 +36,14 @@ for k in keys(d2)
             s.n,
             s.time./1e9,
             xscale=:log10,
-            # yscale=:log10,
+            yscale=:log10,
+            xticks=Int.([1e6, 1e7, 1e8, 1e9]),
             title=name,
             label=t,
             xlabel="n - single column length [Int32]",
             ylabel="time [s]",
-            legend=:topleft
+            legend=:topleft,
+            dpi=600
             )
     end
     savefig("plots/"*name*".png")
