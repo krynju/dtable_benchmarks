@@ -1,0 +1,6 @@
+tech,type,n,chunksize,unique_vals,ncolumns,time,gctime,memory,allocs
+dtable,increment_map,1000000,1000000,1000,4,1.9506e6,0.0,8083248,1622
+dtable,filter_half,1000000,1000000,1000,4,4.85372e7,0.0,21052800,489848
+dtable,reduce_var_all,1000000,1000000,1000,4,1.13861e7,0.0,1097360,21377
+dtable,reduce_var_single,1000000,1000000,1000,4,3.761e6,0.0,530128,10153
+dtable,groupby_reduce_mean_all,1000000,1000000,1000,4,4.564492e8,3.07175e7,396540338,4540631

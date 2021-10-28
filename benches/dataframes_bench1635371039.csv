@@ -1,0 +1,9 @@
+tech,type,n,chunksize,unique_vals,ncolumns,time,gctime,memory,allocs
+dataframesjl,increment_map,10000000,10000000,1000,4,8.6368e6,0.0,80004920,90
+dataframesjl,filter_half,10000000,10000000,1000,4,8.958318e8,2.02684e7,519323120,24881420
+dataframesjl,reduce_var_all,10000000,10000000,1000,4,1.15487e7,0.0,13632,277
+dataframesjl,reduce_var_single,10000000,10000000,1000,4,2.8854e6,0.0,4832,85
+dataframesjl,groupby_reduce_mean_all,10000000,10000000,1000,4,1.40444e7,0.0,80145000,745
+dataframesjl,groupby_single_col,10000000,10000000,1000,4,6.656e6,0.0,80043128,306
+dataframesjl,grouped_reduce_mean_singlecol,10000000,10000000,1000,4,6.5043e6,0.0,43392,247
+dataframesjl,grouped_reduce_mean_allcols,10000000,10000000,1000,4,1.25179e7,0.0,102256,452

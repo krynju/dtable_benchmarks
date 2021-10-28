@@ -1,0 +1,5 @@
+tech,type,n,chunksize,unique_vals,ncolumns,time,gctime,memory,allocs
+dask,increment_map,500000000,1000000,1000,4,1177385799.9999998,0,0,0
+dask,filter_half,500000000,1000000,1000,4,8899612099.999998,0,0,0
+dask,reduce_var_all,500000000,1000000,1000,4,23656581900.0,0,0,0
+dask,reduce_var_single,500000000,1000000,1000,4,4453791400.0,0,0,0
