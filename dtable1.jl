@@ -53,6 +53,7 @@ w_test = (type, f, arg; s=2) -> begin
     flush(file)
     _gc()
     println("done $type")
+    b
 end
 
 

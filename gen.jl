@@ -16,19 +16,21 @@ d = vcat(d[d.tech .!= "dataframesjl", :], a)
 # d = DataFrame(t)
 sort!(d, :time)
 d1 = combine(groupby(d, 1:6), first)
-sort!(d1, :n)
+sort!(d1, [:tech, :n])
 
 d2 = groupby(d1, [2,4,5,6])
 
 mkpath("plots")
+mkpath("summary_benches")
 for k in keys(d2)
     println(k)
-    name= "$(k.type)_chunksize$(string(k.chunksize))_uniquevals$(string(k.unique_vals))_ncols$(string(k.unique_vals))"
+    name= "$(k.type)_chunksize$(string(k.chunksize))_uniquevals$(string(k.unique_vals))"
 
     p = d2[k]
     x = unique(p.n)
     techs = sort(combine(p, :tech => unique).tech_unique)
     ys = [p[p.tech .== t, [:n, :time]] for t in techs]
+    @async CSV.write("summary_benches/"*name*".csv", p)
     plot()
     for (i, t) in enumerate(techs)
         s = ys[i]

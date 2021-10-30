@@ -3,7 +3,7 @@ using DataFrames, Random, BenchmarkTools, OnlineStats, Dates
 
 
 if length(ARGS) != 4
-    n = 1_000_000
+    n = 1_000_000_000
     max_chunksize = 0
     unique_values = Int32(1_000)
     ncolumns = 4
@@ -36,6 +36,7 @@ w_test = (type, f, arg) -> begin
     write(file, s)
     flush(file)
     println("done $type")
+    b
 end
 
 
@@ -51,20 +52,20 @@ w_test("filter_half", ffilter, d)
 
 
 fredall = (d) -> begin
-    combine(d, propertynames(d) .=> var)
+    combine(d, propertynames(d) .=> (x -> fit!(Variance(), x)))
 end
 w_test("reduce_var_all", fredall, d)
 
 
 fredsingle = (d) -> begin
-    combine(d, :a1 => var)
+    combine(d, :a1 => (x -> fit!(Variance(), x)))
 end
 w_test("reduce_var_single", fredsingle, d)
 
 
 
 groupby_reduce_mean_all = (d) -> begin
-    combine(groupby(d, :a1), propertynames(d) .=> mean)
+    combine(groupby(d, :a1), propertynames(d) .=> (x -> fit!(Mean(), x)))
 end
 w_test("groupby_reduce_mean_all", groupby_reduce_mean_all, d)
 
@@ -85,13 +86,13 @@ GC.gc();GC.gc();
 
 
 grouped_reduce_mean_singlecol = (g) -> begin
-    r = combine(g, :a2 => mean)
+    r = combine(g, :a2 => (x -> fit!(Mean(), x)))
 end
 w_test("grouped_reduce_mean_singlecol", grouped_reduce_mean_singlecol, g)
 
 
 grouped_reduce_mean_allcols = (g) -> begin
-    combine(g, names(g) .=> mean)
+    combine(g, names(g) .=> (x -> fit!(Mean(), x)))
 end
 w_test("grouped_reduce_mean_allcols", grouped_reduce_mean_allcols, g)
 

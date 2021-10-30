@@ -1,0 +1,2 @@
+tech,type,n,chunksize,unique_vals,ncolumns,time,gctime,memory,allocs
+dtable,groupby_single_col,500000000,10000000,10000,4,1.0887757526e12,6.099015701e11,130385416133,1225810244

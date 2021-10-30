@@ -1,0 +1,16 @@
+tech,type,n,chunksize,unique_vals,ncolumns,time,gctime,memory,allocs
+dask,grouped_reduce_mean_singlecol,1000000,10000000,1000,4,3.4020809000000014e9,0.0,0,0
+dask,grouped_reduce_mean_singlecol,10000000,10000000,1000,4,3.8301553000000014e9,0.0,0,0
+dask,grouped_reduce_mean_singlecol,100000000,10000000,1000,4,5.12289299999999e9,0.0,0,0
+dask,grouped_reduce_mean_singlecol,500000000,10000000,1000,4,1.4739891699999987e10,0.0,0,0
+dask,grouped_reduce_mean_singlecol,1000000000,10000000,1000,4,1.1072746649999998e11,0.0,0,0
+dataframesjl,grouped_reduce_mean_singlecol,1000000,10000000,1000,4,959000.0,0.0,81832,1530
+dataframesjl,grouped_reduce_mean_singlecol,10000000,10000000,1000,4,1.19685e7,0.0,81832,1530
+dataframesjl,grouped_reduce_mean_singlecol,100000000,10000000,1000,4,1.946613e8,0.0,81864,1531
+dataframesjl,grouped_reduce_mean_singlecol,500000000,10000000,1000,4,1.0775247e9,0.0,81832,1530
+dataframesjl,grouped_reduce_mean_singlecol,1000000000,10000000,1000,4,2.2546678e9,0.0,81832,1530
+dtable,grouped_reduce_mean_singlecol,1000000,10000000,1000,4,2.498552e8,1.91273e7,124086040,1886231
+dtable,grouped_reduce_mean_singlecol,10000000,10000000,1000,4,2.321345e8,0.0,126519432,1894495
+dtable,grouped_reduce_mean_singlecol,100000000,10000000,1000,4,3.020111e8,2.85452e7,137453832,2129574
+dtable,grouped_reduce_mean_singlecol,500000000,10000000,1000,4,5.932167e8,6.18132e7,152853672,2458525
+dtable,grouped_reduce_mean_singlecol,1000000000,10000000,1000,4,1.0665656e9,1.260951e8,184013066,2878343

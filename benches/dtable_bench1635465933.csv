@@ -1,0 +1,3 @@
+tech,type,n,chunksize,unique_vals,ncolumns,time,gctime,memory,allocs
+dtable,grouped_reduce_mean_singlecol,10000000,10000000,10000,4,2.6867295e9,2.452827e8,1336046792,19658342
+dtable,grouped_reduce_mean_allcols,10000000,10000000,10000,4,4.372001e9,5.613787e8,1722296896,28596704

@@ -60,7 +60,7 @@ runb('groupby_single_col', lambda : wait(df.shuffle(0, shuffle='tasks', npartiti
 
 
 
-gf = df.shuffle(0, shuffle='tasks', npartitions=unique_values).persist()
+gf = df.shuffle(0, shuffle='disk', npartitions=unique_values).persist()
 df = None
 wait(gf)
 
