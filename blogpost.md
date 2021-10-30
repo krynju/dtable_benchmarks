@@ -68,32 +68,38 @@ plots still todo, just fyi for now
 
 `reduce(fit!, d, cols=[:a1], init=Variance())`
 
+<!-- 
 ![](plots/reduce_var_single_chunksize1000000_uniquevals1000.png)
-![](plots/reduce_var_single_chunksize10000000_uniquevals1000.png)
+![](plots/reduce_var_single_chunksize10000000_uniquevals1000.png) -->
+
+![](blog_plots/reduce_single_col.svg)
 
 ### reduce_var_all
 
 `reduce(fit!, d, init=Variance())`
 
-![](plots/reduce_var_all_chunksize1000000_uniquevals1000.png)
-![](plots/reduce_var_all_chunksize10000000_uniquevals1000.png)
+<!-- ![](plots/reduce_var_all_chunksize1000000_uniquevals1000.png)
+![](plots/reduce_var_all_chunksize10000000_uniquevals1000.png) -->
 
+![](blog_plots/reduce_allcols.svg)
 
 
 ### increment_map
 
 `map(row -> (r = row.a1 + 1,), d)`
 
-
-![](plots/increment_map_chunksize1000000_uniquevals10000.png)
-![](plots/increment_map_chunksize10000000_uniquevals10000.png)
+![](blog_plots/inrement_map.svg)
+<!-- ![](plots/increment_map_chunksize1000000_uniquevals10000.png)
+![](plots/increment_map_chunksize10000000_uniquevals10000.png) -->
 
 ### filter_half
 
 `filter(row -> row.a1 < unique_values ÷ 2, d)`
 
-![](plots/filter_half_chunksize1000000_uniquevals1000.png)
-![](plots/filter_half_chunksize10000000_uniquevals1000.png)
+![](blog_plots/filter_half.svg)
+
+<!-- ![](plots/filter_half_chunksize1000000_uniquevals1000.png)
+![](plots/filter_half_chunksize10000000_uniquevals1000.png) -->
 
 
 # Shuffle
