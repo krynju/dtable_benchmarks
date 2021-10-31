@@ -1,43 +1,12 @@
-using DataFrames, Random, BenchmarkTools, OnlineStats, Dates
+using Distributed
+@everywhere using DataFrames
 
+filename_prefix = "dataframes_bench"
+include("common_stuff.jl")
 
+d = DataFrame(data)
+data = nothing
 
-if length(ARGS) != 4
-    n = 1_000_000_000
-    max_chunksize = 0
-    unique_values = Int32(1_000)
-    ncolumns = 4
-else
-    n = tryparse(Int, ARGS[1])
-    max_chunksize = tryparse(Int, ARGS[2])
-    unique_values = tryparse(Int32, ARGS[3])
-    ncolumns = tryparse(Int, ARGS[4])
-end
-
-tablesize = sizeof(Int32) * ncolumns * n / 1_000_000
-println("tablesize $tablesize MB")
-
-rng = MersenneTwister(1111)
-d = DataFrame((;[Symbol("a$i") => abs.(rand(rng, Int32, n)) .% unique_values for i in 1:ncolumns]...))
-
-filename = "dataframes_bench" * string(round(Int, Dates.datetime2unix(now()))) * ".csv"
-file = open(filename, "w")
-println("saving results to $filename")
-write(file, "tech,type,n,chunksize,unique_vals,ncolumns,time,gctime,memory,allocs\n")
-
-run_bench = (f, arg) -> begin
-    @benchmark $f($arg) samples=2 evals=1 gcsample=true
-end
-
-w_test = (type, f, arg) -> begin
-    b = run_bench(f, arg)
-    m = minimum(b)
-    s = "dataframesjl,$type,$n,$max_chunksize,$unique_values,$ncolumns,$(m.time),$(m.gctime),$(m.memory),$(m.allocs)\n"
-    write(file, s)
-    flush(file)
-    println("done $type")
-    b
-end
 
 
 fmap = (d) -> begin
