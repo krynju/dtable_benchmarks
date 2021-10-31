@@ -45,9 +45,7 @@ for k in keys(d2)
             xlabel="n - single column length [Int32]",
             ylabel="time [s]",
             legend=:topleft,
-            dpi=600
             )
     end
     savefig("plots/"*name*".png")
-
 end

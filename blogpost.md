@@ -86,6 +86,7 @@ plots still todo, just fyi for now
 
 ### increment_map
 
+
 `map(row -> (r = row.a1 + 1,), d)`
 
 ![](blog_plots/inrement_map.svg)
@@ -118,13 +119,16 @@ Note: Dask is using shuffle explicitly here due to the fact that usage of groupb
 
 - groupby_single_col
 
+![](blog_plots/groupby_single_col.svg)
+
+<!-- 
 ![](plots/groupby_single_col_chunksize1000000_uniquevals1000.png)
 
 ![](plots/groupby_single_col_chunksize10000000_uniquevals1000.png)
 
 ![](plots/groupby_single_col_chunksize1000000_uniquevals10000.png)
 
-![](plots/groupby_single_col_chunksize10000000_uniquevals10000.png)
+![](plots/groupby_single_col_chunksize10000000_uniquevals10000.png) -->
 
 
 # Shuffle reductions
@@ -141,34 +145,40 @@ this one is kinda bad, doesn't really show anything interesting, just a combinat
 
 dtable is faster though and at least finished in more cases
 
-![](plots/groupby_reduce_mean_all_chunksize1000000_uniquevals1000.png)
+![](blog_plots/grouped_reduce_mean_singlecol.svg)
+
+<!-- ![](plots/groupby_reduce_mean_all_chunksize1000000_uniquevals1000.png)
 
 ![](plots/groupby_reduce_mean_all_chunksize1000000_uniquevals10000.png)
 
 ![](plots/groupby_reduce_mean_all_chunksize10000000_uniquevals1000.png)
 
-![](plots/groupby_reduce_mean_all_chunksize10000000_uniquevals10000.png)
+![](plots/groupby_reduce_mean_all_chunksize10000000_uniquevals10000.png) -->
 
 
 ## just reduce
 
 ### grouped_reduce_mean_singlecol
 
-![](plots/groupby_single_col_chunksize1000000_uniquevals1000.png)
+![](blog_plots/grouped_reduce_mean_singlecol.svg)
 
-![](plots/groupby_single_col_chunksize1000000_uniquevals10000.png)
-![](plots/groupby_single_col_chunksize10000000_uniquevals1000.png)
-![](plots/groupby_single_col_chunksize10000000_uniquevals10000.png)
+<!-- ![](plots/grouped_reduce_mean_singlecol_chunksize1000000_uniquevals1000.png)
+
+![](plots/grouped_reduce_mean_singlecol_chunksize1000000_uniquevals10000.png)
+![](plots/grouped_reduce_mean_singlecol_chunksize10000000_uniquevals1000.png)
+![](plots/grouped_reduce_mean_singlecol_chunksize10000000_uniquevals10000.png) -->
 
 ### grouped_reduce_mean_allcols
 
-![](plots/grouped_reduce_mean_allcols_chunksize1000000_uniquevals1000.png)
+![](blog_plots/grouped_reduce_mean_allcols.svg)
+
+<!-- ![](plots/grouped_reduce_mean_allcols_chunksize1000000_uniquevals1000.png)
 
 ![](plots/grouped_reduce_mean_allcols_chunksize1000000_uniquevals10000.png)
 
 ![](plots/grouped_reduce_mean_allcols_chunksize10000000_uniquevals1000.png)
 
-![](plots/grouped_reduce_mean_allcols_chunksize10000000_uniquevals10000.png)
+![](plots/grouped_reduce_mean_allcols_chunksize10000000_uniquevals10000.png) -->
 
 # Implementation details
 
