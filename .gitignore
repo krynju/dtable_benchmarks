@@ -1,0 +1,4 @@
+venv
+dask-worker-space
+*.ps1
+*.sh
