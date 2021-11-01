@@ -1,4 +1,6 @@
 using Distributed
+@everywhere using Pkg;
+@everywhere Pkg.activate(".");
 @everywhere using DataFrames
 
 filename_prefix = "dataframes_bench"

@@ -1,6 +1,8 @@
 using CSV, DataFrames, Tables, TableOperations, Plots
 
-d = vcat(DataFrame.(CSV.File.("benches//" .* readdir("benches/")))...)
+bdir= "benches/"
+
+d = vcat(DataFrame.(CSV.File.(bdir .* readdir(bdir)))...)
 
 allchunksizes = combine(d, :chunksize => unique => :chunksize)
 filter!(x -> x.chunksize != 0, allchunksizes)
@@ -20,8 +22,9 @@ sort!(d1, [:tech, :n])
 
 d2 = groupby(d1, [2,4,5,6])
 
-mkpath("plots")
-mkpath("summary_benches")
+
+rm("plots", recursive=true, force=true); mkpath("plots")
+rm("summary_benches", recursive=true, force=true); mkpath("summary_benches")
 for k in keys(d2)
     println(k)
     name= "$(k.type)_chunksize$(string(k.chunksize))_uniquevals$(string(k.unique_vals))"

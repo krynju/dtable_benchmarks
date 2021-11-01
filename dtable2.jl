@@ -1,4 +1,6 @@
 using Distributed
+@everywhere using Pkg;
+@everywhere Pkg.activate(".");
 @everywhere using Dagger
 
 filename_prefix = "dtable_bench"

@@ -1,4 +1,3 @@
-
 @everywhere using Random, BenchmarkTools, OnlineStats, Dates
 
 if length(ARGS) != 4
