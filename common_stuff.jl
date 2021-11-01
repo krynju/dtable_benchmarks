@@ -44,4 +44,4 @@ w_test = (type, f, arg; s=2) -> begin
 end
 
 rng = MersenneTwister(1111)
-data = (;[Symbol("a$i") => abs.(rand(rng, Int32, n)) .% unique_values for i in 1:ncolumns]...)
+data = (;[Symbol("a$i") => rand(rng, Int32(1):Int32(unique_values), n) for i in 1:ncolumns]...)

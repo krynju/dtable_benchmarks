@@ -10,6 +10,8 @@ An important fact is that the `DTable` doesn't use any dedicated structure for s
 Any `Tables.jl` compatible table type can be used for internal storage, which allows for greater composability with the ecosystem.
 To further support that the set of operations that can be performed on a `DTable` is generic and only relies on interfaces offered by `Tables.jl`.
 
+![](dtable_diagram.svg)
+
 # Why the DTable?
 
 The end goal of the `DTable` is to be the go to solution for out-of-core tabular data processing in Julia and to be competetive with similiar tools such as `Dask` or `Spark`.
@@ -37,16 +39,16 @@ The goal here is to see where we're at right now.
 
 Also please beware that some benchmarks needed adjustment in some ways in order to ensure the benchmark was actually measuring the same type of activity in all technologies used. Details will be noted under each benchmark.
 
-|                         type | avg*times*faster*than*dask | avg*times*faster*than*dataframes |
-| ----------------------------:| --------------------------:| --------------------------------:|
-|                 $filterhalf$ |                    $0.887$ |                          $2.749$ |
-|       $groupbyreducemeanall$ |                   $11.832$ |                          $0.028$ |
-|           $groupbysinglecol$ |                   $18.001$ |                          $0.002$ |
-|   $groupedreducemeanallcols$ |                   $21.727$ |                           $0.93$ |
-| $groupedreducemeansinglecol$ |                    $19.41$ |                          $0.399$ |
-|               $incrementmap$ |                    $5.057$ |                          $0.497$ |
-|               $reducevarall$ |                   $27.123$ |                          $3.745$ |
-|            $reducevarsingle$ |                   $31.126$ |                          $2.942$ |
+|                    Operation     | times faster than Dask     | times faster than DataFrames.jl  |
+| --------------------------------:| --------------------------:| --------------------------------:|
+|                       Filter     |                    $0.887$ |                          $2.749$ |
+|                          Map     |                    $5.057$ |                          $0.497$ |
+|       Reduce (single column)     |                   $31.126$ |                          $2.942$ |
+|         Reduce (all columns)     |                   $27.123$ |                          $3.745$ |
+|            Groupby (shuffle)     |                   $18.001$ |                          $0.002$ |
+|     Groupby (shuffle) + reduce   |                   $11.832$ |                          $0.028$ |
+| Reduce per group (single column) |                    $19.41$ |                          $0.399$ |
+| Reduce per group (all columns)   |                   $21.727$ |                           $0.93$ |
 
 # Configs
 
@@ -63,6 +65,8 @@ Int32 values either 0:999 or 0:9999
 
 Chunksize = partition size
 either 1e6 or 1e7 (16MB or 160MB)
+
+![](table_specs.svg)
 
 # Basic operations
 
