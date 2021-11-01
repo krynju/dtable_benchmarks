@@ -27,7 +27,7 @@ rm("plots", recursive=true, force=true); mkpath("plots")
 rm("summary_benches", recursive=true, force=true); mkpath("summary_benches")
 for k in keys(d2)
     println(k)
-    name= "$(k.type)_chunksize$(string(k.chunksize))_uniquevals$(string(k.unique_vals))"
+    name= "$(k.type)-chunksize$(string(k.chunksize))_uniquevals$(string(k.unique_vals))"
 
     p = d2[k]
     x = unique(p.n)

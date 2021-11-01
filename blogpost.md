@@ -37,6 +37,17 @@ The goal here is to see where we're at right now.
 
 Also please beware that some benchmarks needed adjustment in some ways in order to ensure the benchmark was actually measuring the same type of activity in all technologies used. Details will be noted under each benchmark.
 
+|                         type | avg*times*faster*than*dask | avg*times*faster*than*dataframes |
+| ----------------------------:| --------------------------:| --------------------------------:|
+|                 $filterhalf$ |                    $0.887$ |                          $2.749$ |
+|       $groupbyreducemeanall$ |                   $11.832$ |                          $0.028$ |
+|           $groupbysinglecol$ |                   $18.001$ |                          $0.002$ |
+|   $groupedreducemeanallcols$ |                   $21.727$ |                           $0.93$ |
+| $groupedreducemeansinglecol$ |                    $19.41$ |                          $0.399$ |
+|               $incrementmap$ |                    $5.057$ |                          $0.497$ |
+|               $reducevarall$ |                   $27.123$ |                          $3.745$ |
+|            $reducevarsingle$ |                   $31.126$ |                          $2.942$ |
+
 # Configs
 
 machine 1
@@ -68,18 +79,11 @@ plots still todo, just fyi for now
 
 `reduce(fit!, d, cols=[:a1], init=Variance())`
 
-<!-- 
-![](plots/reduce_var_single_chunksize1000000_uniquevals1000.png)
-![](plots/reduce_var_single_chunksize10000000_uniquevals1000.png) -->
-
 ![](blog_plots/reduce_single_col.svg)
 
 ### reduce_var_all
 
 `reduce(fit!, d, init=Variance())`
-
-<!-- ![](plots/reduce_var_all_chunksize1000000_uniquevals1000.png)
-![](plots/reduce_var_all_chunksize10000000_uniquevals1000.png) -->
 
 ![](blog_plots/reduce_allcols.svg)
 
@@ -90,17 +94,13 @@ plots still todo, just fyi for now
 `map(row -> (r = row.a1 + 1,), d)`
 
 ![](blog_plots/inrement_map.svg)
-<!-- ![](plots/increment_map_chunksize1000000_uniquevals10000.png)
-![](plots/increment_map_chunksize10000000_uniquevals10000.png) -->
+
 
 ### filter_half
 
 `filter(row -> row.a1 < unique_values ÷ 2, d)`
 
 ![](blog_plots/filter_half.svg)
-
-<!-- ![](plots/filter_half_chunksize1000000_uniquevals1000.png)
-![](plots/filter_half_chunksize10000000_uniquevals1000.png) -->
 
 
 # Shuffle
@@ -121,14 +121,6 @@ Note: Dask is using shuffle explicitly here due to the fact that usage of groupb
 
 ![](blog_plots/groupby_single_col.svg)
 
-<!-- 
-![](plots/groupby_single_col_chunksize1000000_uniquevals1000.png)
-
-![](plots/groupby_single_col_chunksize10000000_uniquevals1000.png)
-
-![](plots/groupby_single_col_chunksize1000000_uniquevals10000.png)
-
-![](plots/groupby_single_col_chunksize10000000_uniquevals10000.png) -->
 
 
 # Shuffle reductions
@@ -145,15 +137,7 @@ this one is kinda bad, doesn't really show anything interesting, just a combinat
 
 dtable is faster though and at least finished in more cases
 
-![](blog_plots/grouped_reduce_mean_singlecol.svg)
-
-<!-- ![](plots/groupby_reduce_mean_all_chunksize1000000_uniquevals1000.png)
-
-![](plots/groupby_reduce_mean_all_chunksize1000000_uniquevals10000.png)
-
-![](plots/groupby_reduce_mean_all_chunksize10000000_uniquevals1000.png)
-
-![](plots/groupby_reduce_mean_all_chunksize10000000_uniquevals10000.png) -->
+![](blog_plots/groupby_reduce_mean_all.svg)
 
 
 ## just reduce
@@ -162,23 +146,11 @@ dtable is faster though and at least finished in more cases
 
 ![](blog_plots/grouped_reduce_mean_singlecol.svg)
 
-<!-- ![](plots/grouped_reduce_mean_singlecol_chunksize1000000_uniquevals1000.png)
-
-![](plots/grouped_reduce_mean_singlecol_chunksize1000000_uniquevals10000.png)
-![](plots/grouped_reduce_mean_singlecol_chunksize10000000_uniquevals1000.png)
-![](plots/grouped_reduce_mean_singlecol_chunksize10000000_uniquevals10000.png) -->
 
 ### grouped_reduce_mean_allcols
 
 ![](blog_plots/grouped_reduce_mean_allcols.svg)
 
-<!-- ![](plots/grouped_reduce_mean_allcols_chunksize1000000_uniquevals1000.png)
-
-![](plots/grouped_reduce_mean_allcols_chunksize1000000_uniquevals10000.png)
-
-![](plots/grouped_reduce_mean_allcols_chunksize10000000_uniquevals1000.png)
-
-![](plots/grouped_reduce_mean_allcols_chunksize10000000_uniquevals10000.png) -->
 
 # Implementation details
 
