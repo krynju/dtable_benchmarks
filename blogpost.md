@@ -1,6 +1,15 @@
 
+@def rss_pubdate = Date(2021, 11, 02)
+@def rss = """TODO: DTable: distributed table implementation"""
+@def published = "02 November 2021"
+@def title = "TODO: DTable: distributed table implementation"
+@def authors = """TODO""" 
 
-# What is the DTable?
+TODO: intro
+
+\toc
+
+# What is the `DTable`?
 
 The `DTable` is a table structure providing partitioning of the data and parallelization of operations performed on it in any environment.
 It's built on top of `Dagger`, which enables it to work in any worker and thread setup by taking care of task scheduling and memory management.
@@ -10,34 +19,53 @@ An important fact is that the `DTable` doesn't use any dedicated structure for s
 Any `Tables.jl` compatible table type can be used for internal storage, which allows for greater composability with the ecosystem.
 To further support that the set of operations that can be performed on a `DTable` is generic and only relies on interfaces offered by `Tables.jl`.
 
+The diagram below presents a simple visual explaination of how the `DTable` and `GDTable` (grouped `DTable`) are built.
+The input will be partitioned according to either a `chunksize` provided by the user or the existing partitioning (using the `Tables.partitions` interface).
+After performing a `groupby` operation the data will be shuffled accordingly and new chunks containing only the data belonging to specific keys will be created.
+Along with an `index` these chunks form a `GDTable`.
+
+
 ![](dtable_diagram.svg)
 
 # Why the DTable?
 
-The end goal of the `DTable` is to be the go to solution for out-of-core tabular data processing in Julia and to be competetive with similiar tools such as `Dask` or `Spark`.
-Leveraging the composability of the Julia data ecosystem we can reuse a lot of existing functionality in order to achieve that and continue improving the solution.
-A good example of that is the already mentioned out-of-core processing capability, which will be enabled in the future through the introduction of memory awareness and caching to disk in `Dagger`.
+The `DTable` aims to excel in two areas:
+
+- parallelization of data processing
+- out-of-core processing (will be available through future `Dagger.jl` upgrades)
+
+The goal is to become competetive with similiar tools such as `Dask` or `Spark`, so that Julia users can solve and scale their problems without the need to use a different programming language.
+
+By leveraging the composability of the Julia data ecosystem we can reuse a lot of existing functionality in order to achieve the above goals and continue improving the solution in the future instead of just creating another classic monolithic solution.
+
+## Operations available today
+
+Below is a list of functionality generally available today.
+To post suggestions please comment under this issue https://github.com/JuliaParallel/Dagger.jl/issues/273 .
+
+TODO fix the link
+
+- `map`
+- `filter`
+- `reduce`
+- `groupby` (shuffle with full data movement)
+- grouped `reduce`
+- constructors consuming `Tables.jl` compatible input
+- compatibility with `Tables.jl` (`DTable` can be used as a source)
+
+# Initial performance comparison (multithreaded)
+
+The benchmarks below present the initial performance assessment of the `DTable` compared to `DataFrames.jl`, which is the go-to data processing package in Julia and to `Dask`, which is the main competitor to the `DTable`.
+The `DataFrames.jl` benchmarks are there to provide a reference to what the performance in Julia looks like today.
+
+Please note that the benchmarks below were specifically prepared with the focus on comparing the same type of processing activities, so benchmark commands were accordingly adjusted to make sure the packages are doing exactly the same thing under the hood.
+
+The table below presents the summary of the results obtained in a one machine multithreaded environment (exact setup in the next section).
+Times from every configuration of each benchmark were compared and summarized in the table.
+Values above `1.0` mean the `DTable` was this many times faster than the competing package.
+Values below `1.0` mean that the `DTable` was slower in that benchmark.
 
 
-# What can you do with the DTable today?
-
-- map
-- filter
-- reduce
-- Tables.jl input/output
-- groupby (shuffle with full data movement)
-- grouped reductions
-
-# How does it compare to competition
-
-The benchmarks present the initial performance assessment of the `DTable`
-It's compared against `Dask`, which is the main competitor here.
-The `DataFrames` measurements are there to provide a good reference to what the performance in Julia looks like today.
-
-Please beware that this is an early stage of development of the `DTable` and performance/memory utilization were not yet a major focus of the project.
-The goal here is to see where we're at right now.
-
-Also please beware that some benchmarks needed adjustment in some ways in order to ensure the benchmark was actually measuring the same type of activity in all technologies used. Details will be noted under each benchmark.
 
 |                    Operation     | times faster than Dask     | times faster than DataFrames.jl  |
 | --------------------------------:| --------------------------:| --------------------------------:|
@@ -46,7 +74,7 @@ Also please beware that some benchmarks needed adjustment in some ways in order 
 |       Reduce (single column)     |                   $31.126$ |                          $2.942$ |
 |         Reduce (all columns)     |                   $27.123$ |                          $3.745$ |
 |            Groupby (shuffle)     |                   $18.001$ |                          $0.002$ |
-|     Groupby (shuffle) + reduce   |                   $11.832$ |                          $0.028$ |
+|     (TODO: remove this one) Groupby (shuffle) + reduce   |                   $11.832$ |                          $0.028$ |
 | Reduce per group (single column) |                    $19.41$ |                          $0.399$ |
 | Reduce per group (all columns)   |                   $21.727$ |                           $0.93$ |
 
