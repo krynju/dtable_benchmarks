@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
     runb('reduce_var_single', lambda : df[0].var().compute())
 
-    runb('groupby_reduce_mean_all', lambda : df.shuffle(0, shuffle='tasks', npartitions=unique_values).groupby(0).mean().compute())
+    # runb('groupby_reduce_mean_all', lambda : df.shuffle(0, shuffle='tasks', npartitions=unique_values).groupby(0).mean().compute())
 
     runb('groupby_single_col', lambda : wait(df.shuffle(0, shuffle='tasks', npartitions=unique_values).persist()))
 

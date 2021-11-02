@@ -35,10 +35,10 @@ w_test("reduce_var_single", fredsingle, d)
 
 
 
-groupby_reduce_mean_all = (d) -> begin
-    combine(groupby(d, :a1), propertynames(d) .=> (x -> fit!(Mean(), x)))
-end
-w_test("groupby_reduce_mean_all", groupby_reduce_mean_all, d)
+# groupby_reduce_mean_all = (d) -> begin
+#     combine(groupby(d, :a1), propertynames(d) .=> (x -> fit!(Mean(), x)))
+# end
+# w_test("groupby_reduce_mean_all", groupby_reduce_mean_all, d)
 
 
 

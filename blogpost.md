@@ -74,7 +74,6 @@ Values below `1.0` mean that the `DTable` was slower in that benchmark.
 |       Reduce (single column)     |                   $31.126$ |                          $2.942$ |
 |         Reduce (all columns)     |                   $27.123$ |                          $3.745$ |
 |            Groupby (shuffle)     |                   $18.001$ |                          $0.002$ |
-|     (TODO: remove this one) Groupby (shuffle) + reduce   |                   $11.832$ |                          $0.028$ |
 | Reduce per group (single column) |                    $19.41$ |                          $0.399$ |
 | Reduce per group (all columns)   |                   $21.727$ |                           $0.93$ |
 
@@ -160,17 +159,6 @@ Note: Dask is using shuffle explicitly here due to the fact that usage of groupb
 Note2: Both Dagger and Dask are using OnlineStats reductions for a fair comparison of a typical reductor
 
 Note: Dask is using shuffle explicitly here due to the fact that usage of groupby in Dask doesn't always result in shuffling, we just want to see the shuffle performance here 
-
-## groupby + reduce
-
-### groupby_reduce_mean_all
-
-this one is kinda bad, doesn't really show anything interesting, just a combination
-
-dtable is faster though and at least finished in more cases
-
-![](blog_plots/groupby_reduce_mean_all.svg)
-
 
 ## just reduce
 

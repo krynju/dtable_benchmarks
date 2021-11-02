@@ -33,11 +33,11 @@ fredsingle = (d) -> begin
 end
 w_test("reduce_var_single", fredsingle, d)
 
-groupby_reduce_mean_all = (d) -> begin
-    _g = Dagger.groupby(d, :a1)
-    r = reduce(fit!, _g, init=Mean())
-    fetch(r)
-end
-w_test("groupby_reduce_mean_all", groupby_reduce_mean_all, d, s=1)
+# groupby_reduce_mean_all = (d) -> begin
+#     _g = Dagger.groupby(d, :a1)
+#     r = reduce(fit!, _g, init=Mean())
+#     fetch(r)
+# end
+# w_test("groupby_reduce_mean_all", groupby_reduce_mean_all, d, s=1)
 
 close(file)
