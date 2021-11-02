@@ -1,5 +1,5 @@
-threads=4
-workers=2
+threads=16
+workers=0
 
 # chunksizes=('1000000')
 # ns=('100000')
@@ -10,9 +10,16 @@ ns=('1000000' '10000000' '100000000' '500000000' '1000000000')
 unique_vals_count=('1000' '10000')
 ncols="4"
 
-juliacmd="julia -p$workers -t$threads"
+if [[ $workers -eq 1 ]]; then
+    juliacmd="julia -t$threads"
+    pythoncmd="python daskb.py 1 $threads"
+else
+    juliacmd="julia -p$(($workers-1)) -t$threads"
+    pythoncmd="python daskb.py $workers $threads"
+fi
+
 juliacmddfs="julia -t$threads"
-pythoncmd="python daskb.py $workers $threads"
+
 
 runcmd() {
     echo "starting $1"
