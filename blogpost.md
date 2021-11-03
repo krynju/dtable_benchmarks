@@ -69,86 +69,100 @@ Values below `1.0` mean that the `DTable` was slower in that benchmark.
 
 |                    Operation     | times faster than Dask     | times faster than DataFrames.jl  |
 | --------------------------------:| --------------------------:| --------------------------------:|
-|                       Filter     |                    $0.887$ |                          $2.749$ |
 |                          Map     |                    $5.057$ |                          $0.497$ |
+|                       Filter     |                    $0.887$ |                          $2.749$ |
 |       Reduce (single column)     |                   $31.126$ |                          $2.942$ |
 |         Reduce (all columns)     |                   $27.123$ |                          $3.745$ |
 |            Groupby (shuffle)     |                   $18.001$ |                          $0.002$ |
 | Reduce per group (single column) |                    $19.41$ |                          $0.399$ |
 | Reduce per group (all columns)   |                   $21.727$ |                           $0.93$ |
 
-# Configs
+## Benchmark configuration
 
-machine 1
-Ryzen 5800X 8c/16t
-32 GB RAM
-worker setup: 1
-thread setup: 16
+Benchmarks were performed on a desktop machine with the following specifications:
+- CPU: Ryzen 5800X 8 cores / 16 threads
+- Memory: 32 GB DDR4 RAM
 
-data setup:
-Table with 4 columns of random Int32 type
-Table of n rows
-Int32 values either 0:999 or 0:9999
+All configurations were ran using an environment with 1 worker and 16 threads.
 
-Chunksize = partition size
-either 1e6 or 1e7 (16MB or 160MB)
+The data used for experiments was prepared as follows:
+- column count: $4$ (to allow for a better single/all column benchmark comparison)
+- row count: $n$
+- row value type: `Int32`
+- row value range: $1:unique\_values$ (important for `groupby` ops)
+- chunksize (`Dask` and `DTable` only): $10^6$, $10^7$
+
+Diagram below summarizes the above specifications:
 
 ![](table_specs.svg)
 
-# Basic operations
+# Basic operations (`map`, `filter`, `reduce`)
 
-*description*
+These three operations are the base for the majority of functionality of any table structure. By looking at their performance we can get a good grasp of how the table is doing in the common data transformation scenarios.
 
-note: DataFrames.jl uses OnlineStats instead of Statistics to make the benchmark fair. The goal is to show that parallelization in the `DTable` works as expected (makes the thing go faster).
+Due to the fact that these operations are unaffected by the count of unique values the results of these comparisons are not included here.
 
+### Map (single column increment)
 
-no impact on the performance when it comes to unique values count, including fewer plots
+In the first benchmark we're performing a simple `map` operation across the full table.
 
-plots still todo, just fyi for now
+At first glance it's clear that the overhead coming from the partitioning and parallelization present in the `DTable` and `Dask` is not paying off in this benchmark. The `DataFrames.jl` package is leading here with the `DTable` being on average ~2 times slower.
 
-### reduce_var_single
+At the lower chunksize of `10^6` the `DTable` seems to be scaling better by leveraging the additional parallelization better than its competitor, which isn't greatly affected by that parameter. Overall the `DTable` managed to be ~5 times faster on average than `Dask` across all the tested configurations.
 
-`reduce(fit!, d, cols=[:a1], init=Variance())`
+DTable command: `map(row -> (r = row.a1 + 1,), d)`
+
+![](blog_plots/inrement_map.svg)
+
+### Filter
+
+Here we're measuring the performance of filtering records.
+As the set of values is limited a simple filter expression was chosen, which filters out approximately half of the records (command below).
+
+In this scenario the parallelization and partitioning overhead pays off as both `DTable` and `Dask` are noticably faster than `DataFrames.jl`.
+When it comes to the comparison of these two the performance looks very similiar with `Dask` being on average ~1.12 times faster than the `DTable`.
+
+Still the `DTable` offers performance improvements over `DataFrames.jl` by being on average ~2.74 times faster.
+
+DTable command: `filter(row -> row.a1 < unique_values ÷ 2, d)`
+
+![](blog_plots/filter_half.svg)
+
+### Reduce (single column)
+
+The reduce benchmarks are the place where the `DTable` really shines.
+This task can easily leverage the partitioning of the data in order to parallelize it effectively.
+
+The `DTable` has not only managed to successfully perform faster than `DataFrames.jl` (on average ~3 times faster), but it also managed to significantly beat `Dask`'s performance by being on average ~31 times faster.
+
+Technical note: both `DTable` and `DataFrames.jl` are using `OnlineStats` to obtain the variance while `Dask` is using a solution native to it.
+
+DTable command: `reduce(fit!, d, cols=[:a1], init=Variance())`
 
 ![](blog_plots/reduce_single_col.svg)
 
-### reduce_var_all
+### Reduce (all columns)
 
-`reduce(fit!, d, init=Variance())`
+Similarly to the previous benchmark the `DTable` is performing here very well being on average ~3.75 times faster than `DataFrames.jl` and ~27 times faster than `Dask`.
+
+DTable command: `reduce(fit!, d, init=Variance())`
 
 ![](blog_plots/reduce_allcols.svg)
 
 
-### increment_map
+# Grouped operations
+
+A table shuffle is definitely one of the most straining operations to be performed on a table, so that's why it was tackled first in an attempt to evaluate whether the current technology stack makes it even feasible to run operations like this in the first place.
+
+In the following benchmarks the performance of `groupby` (shuffle) and grouped `reduce` will be put to the test. Other ops like `map` and `filter` are also available for the `GDTable` (grouped `DTable`), but they perform the same as on the normal `DTable`, so there's no reason to benchmark them again.
+
+Technical note: The testing scenarios were adjusted to the extent possible in order to ensure the benchmarks are measuring the same type of activity (shuffle). Most notably `Dask` uses `shuffle` explicitly instead of `groupby` to avoid optimized `groupby/reduce` routines, which are simply not yet present in the `DTable` and would make the comparison invalid.
+
+## Groupby (shuffle)
 
 
-`map(row -> (r = row.a1 + 1,), d)`
 
-![](blog_plots/inrement_map.svg)
-
-
-### filter_half
-
-`filter(row -> row.a1 < unique_values ÷ 2, d)`
-
-![](blog_plots/filter_half.svg)
-
-
-# Shuffle
-
-As shuffle is one of the heaviest ops in distributed table computing it was one of the first ones tackled.
-
-Here we're testing a full shuffle on `un` unique values.
-That will result in creation of a new table with each partition having only rows belonging to the certain key
-
-
-`g = Dagger.groupby(d, :a1)`
-
-
-Note: Dask is using shuffle explicitly here due to the fact that usage of groupby in Dask doesn't always result in shuffling, we just want to see the shuffle performance here 
-
-
-- groupby_single_col
+DTable command: `Dagger.groupby(d, :a1)`
 
 ![](blog_plots/groupby_single_col.svg)
 
