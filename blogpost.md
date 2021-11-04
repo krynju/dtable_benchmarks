@@ -156,35 +156,57 @@ A table shuffle is definitely one of the most straining operations to be perform
 
 In the following benchmarks the performance of `groupby` (shuffle) and grouped `reduce` will be put to the test. Other ops like `map` and `filter` are also available for the `GDTable` (grouped `DTable`), but they perform the same as on the normal `DTable`, so there's no reason to benchmark them again.
 
-Technical note: The testing scenarios were adjusted to the extent possible in order to ensure the benchmarks are measuring the same type of activity (shuffle). Most notably `Dask` uses `shuffle` explicitly instead of `groupby` to avoid optimized `groupby/reduce` routines, which are simply not yet present in the `DTable` and would make the comparison invalid.
+Along with the grouped benchmarks the results for different `unique_values` count are included, since the number of them directly affects the number of groups obtained through the grouping operation.
+
+Technical note: The testing scenarios were adjusted to the extent possible in order to ensure the benchmarks are measuring the same type of activity (shuffle). Most notably `Dask` benchmarks use `shuffle` explicitly instead of `groupby` to avoid optimized `groupby/reduce` routines, which are simply not yet present in the `DTable` and would make the comparison invalid.
 
 ## Groupby (shuffle)
 
+In this experiment we're looking at shuffle performance with different data configurations.
+`DataFrames.jl` doesn't perform data shuffles on groupby, so its performance is clearly superior to the other two technologies and is just included for reference purposes.
 
+Let's focus on `Dask` and the `DTable`, which are actually performing the shuffle operation.
+Across the different data configurations we can see a common pattern where the `DTable` is significantly faster than `Dask` at lower data sizes, which leads to it being on average ~18 times faster, but as the data size grows the scaling of `Dask` is looking better and it eventually matches the speeds of the `DTable`.
+
+However, in the more stressful configurations, in which the `unique_values` count was equal to $10^4$, `Dask` was repeatedly failing to finish the shuffle after a certain data size ($n$ > $10^8$) for no clear reason. These failed benchmarks were not included in the performance comparison in the table from the previous section.
+
+The `DTable` managed to finish these more complex scenarios without any observable hit on scaling, which is a good sign, but future testing needs to be performed on even larger data sizes to gain more insight into how the current algorithm is performing.
 
 DTable command: `Dagger.groupby(d, :a1)`
 
 ![](blog_plots/groupby_single_col.svg)
 
 
+## Grouped reduction (single column)
 
-# Shuffle reductions
+As in the previous reduction benchmarks the `DTable` is competetive here as well.
+For the single column reductions it's on average ~19.41 times faster than `Dask`.
 
-Note2: Both Dagger and Dask are using OnlineStats reductions for a fair comparison of a typical reductor
+One key difference that requires further investigation is that contrary to the previous reduction benchmark the `DTable` doesn't offer a speedup compared to `DataFrames.jl` across all the data sizes.
+At first glance it looks like the current grouped reduction algorithm has a significant overhead that reduces the performance at lower data sizes.
+Hopefully that can be optimized in the future.
 
-Note: Dask is using shuffle explicitly here due to the fact that usage of groupby in Dask doesn't always result in shuffling, we just want to see the shuffle performance here 
+As of today now in the single column reductions the `DTable` is on average ~2.5 times slower than `DataFrames.jl`.
 
-## just reduce
 
-### grouped_reduce_mean_singlecol
+| Reduce per group (single column) |                    $19.41$ |                          $0.399$ |
+| Reduce per group (all columns)   |                   $21.727$ |                           $0.93$ |
+
+DTable command: `r = reduce(fit!, g, cols=[:a2], init=Mean())`
 
 ![](blog_plots/grouped_reduce_mean_singlecol.svg)
+
+
+## Grouped reduction (all columns)
+
+
 
 
 ### grouped_reduce_mean_allcols
 
 ![](blog_plots/grouped_reduce_mean_allcols.svg)
 
+DTable command: r = reduce(fit!, g, init=Mean())
 
 # Implementation details
 

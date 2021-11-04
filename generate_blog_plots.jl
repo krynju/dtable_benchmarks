@@ -1,10 +1,17 @@
-using CSV, DataFrames, Tables, TableOperations, Plots
+using CSV, DataFrames, Tables, TableOperations, Plots, LaTeXStrings
 
 ld = (filename) -> CSV.read(filename, DataFrame)
 
 tech = ["dtable","dask" ,"dataframesjl" ]
 tech_nicenames = ["DTable","Dask", "DataFrames.jl"]
 mkpath("blog_plots")
+
+
+TIMESTRING = L"\mathrm{time\hspace{0.5}[s]}"
+TITLEFONTSIZE = 12
+XLABEL = L"n"
+CHUNKSIZETITLE = (x) -> L"\mathrm{chunksize: 10^%$x}"
+CHUNKUNIQUETITLE = (x, y) -> L"\mathrm{chunksize: 10^%$x}, \mathrm{uniquevals: 10^%$y}"
 
 prep_plot_input = (d) -> [d[d.tech .== t, [:n, :time]] for t in tech]
 
@@ -25,12 +32,12 @@ lrplot = (l, r) -> begin
             yscale=:log10,
             xticks=[1e6, 1e7, 1e8, 1e9],
             label=tech_nicenames[i],
-            xlabel="n",
-            ylabel="time [s]",
+            xlabel=XLABEL,
+            ylabel=TIMESTRING,
             legend=:topleft,
             subplot=1,
-            title="chunksize: 1e6",
-            titlefontsize=10,
+            title=CHUNKSIZETITLE(6),
+            titlefontsize=TITLEFONTSIZE,
             yticks=[1e-2,1e-1, 1e0, 1e1, 1e2],
         )
     end
@@ -45,11 +52,11 @@ lrplot = (l, r) -> begin
             xticks=[1e6, 1e7, 1e8, 1e9],
             yticks=[1e-2,1e-1, 1e0, 1e1, 1e2],
             label=tech_nicenames[i],
-            xlabel="n",
+            xlabel=XLABEL,
             legend=false,
             subplot=2,
-            title="chunksize: 1e7",
-            titlefontsize=10,
+            title=CHUNKSIZETITLE(7),
+            titlefontsize=TITLEFONTSIZE,
         )
     end
     return p
@@ -121,16 +128,16 @@ plot4 = (tl, tr, bl, br) -> begin
             yscale=:log10,
             xticks=[1e6, 1e7, 1e8, 1e9],
             label=tech_nicenames[i],
-            xlabel="n",
-            ylabel="time [s]",
+            xlabel=XLABEL,
+            ylabel=TIMESTRING,
             legend=:topleft,
             subplot=1,
-            title="chunksize: 1e6, uvals=1e3",
-            titlefontsize=10,
+            title=CHUNKUNIQUETITLE(6,3),
+            titlefontsize=TITLEFONTSIZE,
         )
     end
-
-    titles = ["chunksize: 1e7, uvals=1e3","chunksize: 1e6, uvals=1e4","chunksize: 1e7, uvals=1e4"]
+    titles = [CHUNKUNIQUETITLE(c,v) for (c,v) in [(7,3), (6,4), (7,4)]]
+    # titles = ["chunksize: 1e7, uvals=1e3","chunksize: 1e6, uvals=1e4","chunksize: 1e7, uvals=1e4"]
     data = [tr,bl, br]
     indx = [2,3,4]
 
@@ -145,12 +152,12 @@ plot4 = (tl, tr, bl, br) -> begin
                 yscale=:log10,
                 xticks=[1e6, 1e7, 1e8, 1e9],
                 label=tech_nicenames[i],
-                xlabel="n",
-                ylabel="time [s]",
+                xlabel=XLABEL,
+                ylabel=TIMESTRING,
                 legend=false,
                 subplot=ii,
                 title=title,
-                titlefontsize=10,
+                titlefontsize=TITLEFONTSIZE,
             )
         end
     end
