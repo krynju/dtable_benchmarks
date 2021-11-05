@@ -5,7 +5,12 @@
 @def title = "TODO: DTable: distributed table implementation"
 @def authors = """TODO""" 
 
-TODO: intro
+In a recent survey conducted within the Julia data community the functionality to process tabular data larger than RAM came out on top.
+While Julia already has some tools for that they are not very popular within the community and have been mostly left unmaintained (e.g. `JuliaDB`).
+
+The subject of this blogpost, which is the `DTable`, plans to address this popular use case in a composable manner by leveraging the current Julia data ecosystem and our existing distributed computing and memory management capabilities.
+
+We hope it's a major step in the direction of having a native Julia tool that will handle all your big tabular data processing needs!
 
 \toc
 
