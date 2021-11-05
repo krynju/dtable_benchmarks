@@ -62,20 +62,23 @@ Please note that the benchmarks below were specifically prepared with the focus 
 
 The table below presents the summary of the results obtained in a one machine multithreaded environment (exact setup in the next section).
 Times from every configuration of each benchmark were compared and summarized in the table.
-Values above `1.0` mean the `DTable` was this many times faster than the competing package.
-Values below `1.0` mean that the `DTable` was slower in that benchmark.
-
+Positive values mean the `DTable` was this many times faster than the competitor.
+Negative values mean it was slower this many times than the competitor.
 
 
 |                    Operation     | times faster than Dask     | times faster than DataFrames.jl  |
 | --------------------------------:| --------------------------:| --------------------------------:|
-|                          Map     |                    $5.057$ |                          $0.497$ |
-|                       Filter     |                    $0.887$ |                          $2.749$ |
-|       Reduce (single column)     |                   $31.126$ |                          $2.942$ |
-|         Reduce (all columns)     |                   $27.123$ |                          $3.745$ |
-|            Groupby (shuffle)     |                   $18.001$ |                          $0.002$ |
-| Reduce per group (single column) |                    $19.41$ |                          $0.399$ |
-| Reduce per group (all columns)   |                   $21.727$ |                           $0.93$ |
+|                          Map     |                      $4.5$ |                           $-2.5$ |
+|                       Filter     |                     $-1.2$ |                            $2.7$ |
+|       Reduce (single column)     |                     $31.1$ |                            $2.3$ |
+|         Reduce (all columns)     |                     $27.1$ |                            $3.1$ |
+|            Groupby (shuffle)     |                     $17.0$ |                         $-655.5$ |
+| Reduce per group (single column) |                     $20.2$ |                         $-422.3$ |
+| Reduce per group (all columns)   |                     $22.3$ |                         $-205.5$ |
+
+
+
+
 
 ## Benchmark configuration
 
@@ -142,7 +145,7 @@ DTable command: `reduce(fit!, d, cols=[:a1], init=Variance())`
 ![](blog_plots/reduce_single_col.svg)
 
 ### Reduce (all columns)
-
+ 
 Similarly to the previous benchmark the `DTable` is performing here very well being on average ~3.75 times faster than `DataFrames.jl` and ~27 times faster than `Dask`.
 
 DTable command: `reduce(fit!, d, init=Variance())`
@@ -179,18 +182,14 @@ DTable command: `Dagger.groupby(d, :a1)`
 
 ## Grouped reduction (single column)
 
-As in the previous reduction benchmarks the `DTable` is competetive here as well.
-For the single column reductions it's on average ~19.41 times faster than `Dask`.
+As in the previous reduction benchmarks the `DTable` is also performing here better than direct competition.
+For the single column reductions it's on average ~20 times faster than `Dask` and scales very similarly to it.
 
-One key difference that requires further investigation is that contrary to the previous reduction benchmark the `DTable` doesn't offer a speedup compared to `DataFrames.jl` across all the data sizes.
-At first glance it looks like the current grouped reduction algorithm has a significant overhead that reduces the performance at lower data sizes.
-Hopefully that can be optimized in the future.
+One key difference is that the `DTable` doesn't offer a speedup compared to `DataFrames.jl` across all the data sizes.
+It looks like the current grouped reduction algorithm has a significant entry overhead that limits the performance potential at lower data sizes.
+For the benchmarks with the smaller `unique_values` count the `DTable` manages to catch up to `DataFrames.jl` at bigger data sizes, which may give a hint that the flatter scaling might eventually provide better performance results when increasing the data size further.
 
-As of today now in the single column reductions the `DTable` is on average ~2.5 times slower than `DataFrames.jl`.
-
-
-| Reduce per group (single column) |                    $19.41$ |                          $0.399$ |
-| Reduce per group (all columns)   |                   $21.727$ |                           $0.93$ |
+But as of today in the single column reductions the `DTable` is on average ~2.5 times slower than `DataFrames.jl`.
 
 DTable command: `r = reduce(fit!, g, cols=[:a2], init=Mean())`
 
@@ -199,14 +198,18 @@ DTable command: `r = reduce(fit!, g, cols=[:a2], init=Mean())`
 
 ## Grouped reduction (all columns)
 
+The situation with an all column reduction looks very similiar.
+Overall the `DTable` managed to be 
 
 
+| Reduce per group (all columns)   |                     $22.3$ |                          $0.971$ |
 
-### grouped_reduce_mean_allcols
+
+DTable command: `r = reduce(fit!, g, init=Mean())`
+
+
 
 ![](blog_plots/grouped_reduce_mean_allcols.svg)
-
-DTable command: r = reduce(fit!, g, init=Mean())
 
 # Implementation details
 

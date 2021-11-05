@@ -1,0 +1,7 @@
+tech,type,n,chunksize,unique_vals,ncolumns,time,gctime,memory,allocs
+dtable,grouped_reduce_mean_singlecol,100000000,1000000,1000,4,4.540652e8,4.96546e7,179470536,2772452
+dtable,grouped_reduce_mean_allcols,100000000,1000000,1000,4,4.852599e8,0.0,216977392,3512462
+dtable,grouped_reduce_mean_singlecol,100000000,1000000,1000,4,4.381553e8,0.0,192555066,3032269
+dtable,grouped_reduce_mean_allcols,100000000,1000000,1000,4,5.117947e8,0.0,224295248,3698347
+dtable,grouped_reduce_mean_singlecol,100000000,1000000,1000,4,4.575132e8,0.0,201569592,3235530
+dtable,grouped_reduce_mean_allcols,100000000,1000000,1000,4,5.307964e8,0.0,230369904,3837065
