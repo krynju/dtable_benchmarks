@@ -189,8 +189,6 @@ One key difference is that the `DTable` doesn't offer a speedup compared to `Dat
 It looks like the current grouped reduction algorithm has a significant entry overhead that limits the performance potential at lower data sizes.
 For the benchmarks with the smaller `unique_values` count the `DTable` manages to catch up to `DataFrames.jl` at bigger data sizes, which may give a hint that the flatter scaling might eventually provide better performance results when increasing the data size further.
 
-But as of today in the single column reductions the `DTable` is on average ~2.5 times slower than `DataFrames.jl`.
-
 DTable command: `r = reduce(fit!, g, cols=[:a2], init=Mean())`
 
 ![](blog_plots/grouped_reduce_mean_singlecol.svg)
