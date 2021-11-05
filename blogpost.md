@@ -213,18 +213,22 @@ DTable command: `r = reduce(fit!, g, init=Mean())`
 
 # Implementation details
 
-stuff
+As already mentioned the `DTable` is mainly built on top of `Dagger` and `Tables.jl`.
+That means it can run in any environment `Dagger` is capable of running in.
+You should be able to use the `DTable` on your local machine in a threaded environment, on a bigger machine with many workers and threads or even on multiple machines and have the workers communicate over the network.
 
-# Roadmap
+The `DTable` uses the new `EagerAPI` in `Dagger`, which means all the parallelized calls are done using `Dagger.spawn`.
+Memory is managed by `Dagger` as well through the usage of `MemPool.jl`.
+Upgrades to either in the future will hopefully yield performance improvements for the `DTable`.
 
-link to the DTable todo
+Due to the dependency of the `DTable` on these projects the `DTable` itself can focus on delivering `Tables.jl` compatible algorithms and interfaces to solve the problems that users want to solve with it.
+Because of that approach we hope that the `Tables.jl` interface will grow to include an even wider range of functionality and other packages will be able to use these interfaces effectively.
 
-some mention that some things will be available within ~6 months
-
+For more details please visit the Dagger documentation: [](https://juliaparallel.github.io/Dagger.jl/dev/)
 
 
 # How can I use it?
 
-custom Julia branch for now (not even master), but we're trying to put everything necessary into julia 1.7
-
-Dagger ~ newest/master
+The `DTable` is already available within the `Dagger` package, so you can go ahead and try it out!
+However, we're hoping to include all the necessary Julia fixes that make the full experience complete and issue-free for the upcoming 1.7 release.
+As of right now the PRs necessary in order to have the `DTable` and `Dagger` working without any major issues in a threaded and mixed environment have not yet been merged into master, but we'll update the blogpost once the situation changes!
