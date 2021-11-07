@@ -15,11 +15,7 @@ g = groupby(cmp, :type)
 
 fff = (a,b) -> begin 
     any(ismissing.([a,b])) && return missing
-    if b >= a 
-        -b/a 
-    else 
-        a/b
-    end
+    -(b-a)/b*100
 end
 
 c = combine(g,
