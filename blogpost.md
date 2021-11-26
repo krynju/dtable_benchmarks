@@ -1,9 +1,9 @@
 
 @def rss_pubdate = Date(2021, 11, 02)
-@def rss = """TODO: DTable: distributed table implementation"""
+@def rss = """DTable – an early performance assessment of a new distributed table implementation"""
 @def published = "02 November 2021"
-@def title = "TODO: DTable: distributed table implementation"
-@def authors = """TODO""" 
+@def title = "DTable – an early performance assessment of a new distributed table implementation"
+@def authors = """Krystian Guliński""" 
 
 In a recent survey conducted within the Julia community the functionality to process tabular data larger than available RAM came out on top.
 While Julia already has some tools for that they are not very popular within the community and have been mostly left unmaintained (e.g. `JuliaDB`).
