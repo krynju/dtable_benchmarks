@@ -28,8 +28,11 @@ Provided input will be partitioned according to either a `chunksize` argument or
 After performing a `groupby` operation the data will be shuffled accordingly and new chunks containing only the data belonging to specific keys will be created.
 Along with an `index` these chunks form a `GDTable`.
 
-
-![](dtable_diagram.svg)
+~~~
+<p align="center">
+  <img src="blog_plots/dtable_diagram.svg" />
+</p>
+~~~
 
 # Why the DTable?
 
@@ -97,7 +100,11 @@ The data used for experiments was prepared as follows:
 
 Diagram below summarizes the above specifications:
 
-![](table_specs.svg)
+~~~
+<p align="center">
+  <img src="blog_plots/table_specs.svg" />
+</p>
+~~~
 
 # Basic operations (`map`, `filter`, `reduce`)
 
@@ -236,6 +243,6 @@ Functionality presented as part of this blogpost is generally available as of to
 We highly encourage everyone to have a look at the documentation and to try out the examples included!
 Due to the fact that the `DTable` is still in early development it's very much possible to provide feedback and affect the future design decisions.
 
-However, there are some pending PRs that haven't been merged into Julia yet that improve the thread safety of `Distributed`, which directly affects `Dagger.jl`. User experience may be interrupted when extensively using the `DTable` in a threaded or mixed environment by occasional hangs or crashes.
+However, there are some pending PRs that haven't been merged into Julia yet that improve the thread safety of `Distributed`, which directly affects `Dagger.jl` stability. User experience may be interrupted when extensively using the `DTable` in a threaded or mixed environment by occasional hangs or crashes.
 
 We hope to include all the necessary fixes in the upcoming Julia 1.7 release.

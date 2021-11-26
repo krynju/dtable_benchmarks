@@ -68,7 +68,7 @@ let
 
     p = lrplot(l, r)
     plot!(
-        plot_title="Reduction: single column",
+        plot_title="reduce (single column)",
 
     )
     display(p)
@@ -81,7 +81,7 @@ let
     r = ld("summary_benches/reduce_var_all-chunksize10000000_uniquevals1000.csv")
     p = lrplot(l, r)
     plot!(
-        plot_title="Reduction: all columns (4)",
+        plot_title="reduce (all columns - 4)",
 
     )
     display(p)
@@ -93,7 +93,7 @@ let
     r = ld("summary_benches/increment_map-chunksize10000000_uniquevals10000.csv")
     p = lrplot(l, r)
     plot!(
-        plot_title="Map: increment single column",
+        plot_title="map (single column increment)",
     )
     display(p)
     savefig(p, "blog_plots/inrement_map.svg")
@@ -104,7 +104,7 @@ let
     r = ld("summary_benches/filter_half-chunksize10000000_uniquevals1000.csv")
     p = lrplot(l, r)
     plot!(
-        plot_title="Filter: ~half of records",
+        plot_title="filter (half of elements)",
     )
     display(p)
     savefig(p, "blog_plots/filter_half.svg")
@@ -176,7 +176,7 @@ let
 
     p = plot4(tl,tr,bl,br)
     plot!(
-        plot_title="groupby_singlecol",
+        plot_title="groupy (shuffle)",
 
     )
     display(p)
@@ -192,7 +192,7 @@ let
 
     p = plot4(tl,tr,bl,br)
     plot!(
-        plot_title="grouped_reduce_mean_allcols",
+        plot_title="grouped reduce (all columns - 4)",
 
     )
     display(p)
@@ -207,7 +207,7 @@ let
 
     p = plot4(tl,tr,bl,br)
     plot!(
-        plot_title="grouped_reduce_mean_singlecol",
+        plot_title="grouped reduce (single column)",
 
     )
     display(p)
