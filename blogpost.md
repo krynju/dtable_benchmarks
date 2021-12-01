@@ -250,6 +250,10 @@ We hope to include all the necessary fixes in the upcoming Julia 1.7 release.
 
 The `DTable` has successfully passed the proof-of-concept stage and is currently under active development as a part of the `Dagger.jl` package.
 
+This early performance assessment has confirmed that the `DTable` has the potential to become a competetive tool for processing tabular data.
+It managed to perform significantly better than direct competition (`Dask`) in 6 out of 7 presented benchmarks and in the remaining one it doesn't fall too far behind.
+While this looks promising there's still a lot of work ahead in order to make the `DTable` feature-rich and even faster, so keep an eye out for future updates on the project.
+
 Functionality presented as part of this blogpost is generally available as of today.
 We highly encourage everyone to have a look at the documentation and to try out the examples included!
-Due to the fact that the `DTable` is still in early development, it's very much possible to provide feedback and affect future design decisions.
+Due to the fact that the `DTable` is still in early development, it's very much possible to provide feedback and affect the roadmap and future design decisions.
