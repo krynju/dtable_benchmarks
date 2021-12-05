@@ -1,13 +1,13 @@
-threads=2
-workers=2
+threads=16
+workers=0
 
-chunksizes=('1000000')
-ns=('100000')
-unique_vals_count=('1000')
+# chunksizes=('1000000')
+# ns=('100000')
+# unique_vals_count=('1000')
 
-# chunksizes=('1000000' '10000000')
-# ns=('1000000' '10000000' '100000000' '500000000' '1000000000')
-# unique_vals_count=('1000' '10000')
+chunksizes=('1000000' '10000000')
+ns=('1000000' '10000000' '100000000' '500000000' '1000000000')
+unique_vals_count=('1000' '10000')
 ncols="4"
 
 s="scripts_benchmark/"
