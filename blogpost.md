@@ -1,7 +1,7 @@
 
-@def rss_pubdate = Date(2021, 11, 02)
+@def rss_pubdate = Date(2021, 12, 04)
 @def rss = """DTable – an early performance assessment of a new distributed table implementation"""
-@def published = "02 November 2021"
+@def published = "04 December 2021"
 @def title = "DTable – an early performance assessment of a new distributed table implementation"
 @def authors = """Krystian Guliński""" 
 
@@ -35,7 +35,7 @@ Along with an `index`, these chunks form a `GDTable`.
 
 ~~~
 <p align="center">
-  <img src="blog_plots/dtable_diagram.svg" />
+  <img src="/assets/blog/2021-dtable/dtable_diagram.svg" />
 </p>
 ~~~
 
@@ -96,7 +96,7 @@ Benchmarks were performed on a desktop with the following specifications:
 
 All configurations were ran using an environment with 1 worker and 16 threads.
 
-The data used for the experiments were prepared as follows:
+The data used for the experiments was prepared as follows:
 - column count: $4$ (to allow for a distinction between single and all column benchmarks)
 - row count: $n$
 - row value type: `Int32`
@@ -107,7 +107,7 @@ The diagram below summarizes the above specifications:
 
 ~~~
 <p align="center">
-  <img src="blog_plots/table_specs.svg" />
+  <img src="/assets/blog/2021-dtable/table_specs.svg" />
 </p>
 ~~~
 
@@ -127,7 +127,7 @@ At the smaller chunksize (`10^6`) the `DTable` is scaling better than its compet
 
 DTable command: `map(row -> (r = row.a1 + 1,), d)`
 
-![](blog_plots/inrement_map.svg)
+![](/assets/blog/2021-dtable/inrement_map.svg)
 
 ## Filter
 
@@ -140,7 +140,7 @@ On top of almost matching the performance of the main competitor, the `DTable` o
 
 DTable command: `filter(row -> row.a1 < unique_values ÷ 2, d)`
 
-![](blog_plots/filter_half.svg)
+![](/assets/blog/2021-dtable/filter_half.svg)
 
 ## Reduce (single column)
 
@@ -153,7 +153,7 @@ Please note that both `DTable` and `DataFrames.jl` are using `OnlineStats.jl` to
 
 DTable command: `reduce(fit!, d, cols=[:a1], init=Variance())`
 
-![](blog_plots/reduce_single_col.svg)
+![](/assets/blog/2021-dtable/reduce_single_col.svg)
 
 ## Reduce (all columns)
  
@@ -165,14 +165,14 @@ As of right now, the `DTable` is performing the reduction of all columns as a si
 
 DTable command: `reduce(fit!, d, init=Variance())`
 
-![](blog_plots/reduce_allcols.svg)
+![](/assets/blog/2021-dtable/reduce_allcols.svg)
 
 
 # Grouped operations
 
 A table shuffle is definitely one of the most demanding operations that can be performed on a table, so that's why it was tackled early to evaluate whether the current technology stack makes it feasible to run such operations.
 
-In the following benchmarks, the performance of `groupby` (shuffle) and grouped `reduce` are put to the test. Other operations like `map` and `filter` are also available for the `GDTable` (grouped `DTable`), but they work in the same way if they were performed on a `DTable`, so previously shown benchmarks still apply.
+In the following benchmarks, the performance of `groupby` (shuffle) and grouped `reduce` are put to the test. Other operations like `map` and `filter` are also available for the `GDTable` (grouped `DTable`), but they work in the same way as if they were performed on a `DTable`, so previously shown benchmarks still apply.
 
 The following benchmarks include results obtained in tests with varying `unique_values` counts, since the number of them directly affects the number of groups generated through the grouping operation.
 
@@ -194,7 +194,7 @@ The `DTable` managed to finish these complex scenarios without any observable hi
 
 DTable command: `Dagger.groupby(d, :a1)`
 
-![](blog_plots/groupby_single_col.svg)
+![](/assets/blog/2021-dtable/groupby_single_col.svg)
 
 
 ## Grouped reduction (single column)
@@ -209,7 +209,7 @@ This may indicate that by increasing the data size further, we might eventually 
 
 DTable command: `r = reduce(fit!, g, cols=[:a2], init=Mean())`
 
-![](blog_plots/grouped_reduce_mean_singlecol.svg)
+![](/assets/blog/2021-dtable/grouped_reduce_mean_singlecol.svg)
 
 
 ## Grouped reduction (all columns)
@@ -221,7 +221,7 @@ Again, the `DTable` is heavily falling behind `DataFrames.jl` on smaller data si
 
 DTable command: `r = reduce(fit!, g, init=Mean())`
 
-![](blog_plots/grouped_reduce_mean_allcols.svg)
+![](/assets/blog/2021-dtable/grouped_reduce_mean_allcols.svg)
 
 # Implementation details (for interested users)
 
@@ -242,9 +242,9 @@ For more details, please visit the [Dagger documentation](https://juliaparallel.
 
 # Some caveats
 
-There are some pending PRs that haven't been merged into Julia yet that improve the thread safety of `Distributed`, which directly affects `Dagger.jl` stability. The user experience may be interrupted when extensively using the `DTable` in a threaded or mixed environment by occasional hangs or crashes.
+There are some pending PRs that haven't been merged into Julia yet that improve the thread safety of `Distributed`, which directly affects `Dagger.jl` stability. The user experience may occasionally be interrupted when extensively using the `DTable` in a threaded or mixed environment by occasional hangs or crashes.
 
-We hope to include all the necessary fixes in the upcoming Julia 1.7 release.
+We hope to include all the necessary fixes in future patches to Julia 1.7.
 
 # Conclusion
 
