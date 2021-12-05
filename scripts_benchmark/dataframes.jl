@@ -4,7 +4,7 @@ using Distributed
 @everywhere using DataFrames
 
 filename_prefix = "dataframes_bench"
-include("scripts_benchmark/common_stuff.jl")
+include("common_stuff.jl")
 
 d = DataFrame(data)
 data = nothing

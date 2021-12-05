@@ -4,8 +4,8 @@ using Distributed
 @everywhere using Dagger
 
 filename_prefix = "dtable_bench"
-include("scripts_benchmark/common_stuff.jl")
-include("scripts_benchmark/dagger_common.jl")
+include("common_stuff.jl")
+include("dagger_common.jl")
 
 
 fmap = (d) -> begin
