@@ -1,0 +1,2 @@
+tech,type,n,chunksize,unique_vals,ncolumns,time,gctime,memory,allocs
+dataframesjl,filter_half,500000000,0,10000,4,1.1150551e9,701200.0,6061298528,75

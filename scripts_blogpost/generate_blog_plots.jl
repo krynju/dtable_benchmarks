@@ -63,8 +63,8 @@ lrplot = (l, r) -> begin
 end
 
 let
-    l = ld("summary_benches/reduce_var_single-chunksize1000000_uniquevals1000.csv")
-    r = ld("summary_benches/reduce_var_single-chunksize10000000_uniquevals1000.csv")
+    l = ld("summaries/reduce_var_single-chunksize1000000_uniquevals1000.csv")
+    r = ld("summaries/reduce_var_single-chunksize10000000_uniquevals1000.csv")
 
     p = lrplot(l, r)
     plot!(
@@ -77,8 +77,8 @@ end
 
 
 let
-    l = ld("summary_benches/reduce_var_all-chunksize1000000_uniquevals1000.csv")
-    r = ld("summary_benches/reduce_var_all-chunksize10000000_uniquevals1000.csv")
+    l = ld("summaries/reduce_var_all-chunksize1000000_uniquevals1000.csv")
+    r = ld("summaries/reduce_var_all-chunksize10000000_uniquevals1000.csv")
     p = lrplot(l, r)
     plot!(
         plot_title="reduce (all columns - 4)",
@@ -89,8 +89,8 @@ let
 end
 
 let
-    l = ld("summary_benches/increment_map-chunksize1000000_uniquevals10000.csv")
-    r = ld("summary_benches/increment_map-chunksize10000000_uniquevals10000.csv")
+    l = ld("summaries/increment_map-chunksize1000000_uniquevals10000.csv")
+    r = ld("summaries/increment_map-chunksize10000000_uniquevals10000.csv")
     p = lrplot(l, r)
     plot!(
         plot_title="map (single column increment)",
@@ -100,8 +100,8 @@ let
 end
 
 let
-    l = ld("summary_benches/filter_half-chunksize1000000_uniquevals1000.csv")
-    r = ld("summary_benches/filter_half-chunksize10000000_uniquevals1000.csv")
+    l = ld("summaries/filter_half-chunksize1000000_uniquevals1000.csv")
+    r = ld("summaries/filter_half-chunksize10000000_uniquevals1000.csv")
     p = lrplot(l, r)
     plot!(
         plot_title="filter (half of elements)",
@@ -169,10 +169,10 @@ plot4 = (tl, tr, bl, br) -> begin
 end
 
 let
-    tl = ld("summary_benches/groupby_single_col-chunksize1000000_uniquevals1000.csv")
-    bl = ld("summary_benches/groupby_single_col-chunksize1000000_uniquevals10000.csv")
-    tr = ld("summary_benches/groupby_single_col-chunksize10000000_uniquevals1000.csv")
-    br = ld("summary_benches/groupby_single_col-chunksize10000000_uniquevals10000.csv")
+    tl = ld("summaries/groupby_single_col-chunksize1000000_uniquevals1000.csv")
+    bl = ld("summaries/groupby_single_col-chunksize1000000_uniquevals10000.csv")
+    tr = ld("summaries/groupby_single_col-chunksize10000000_uniquevals1000.csv")
+    br = ld("summaries/groupby_single_col-chunksize10000000_uniquevals10000.csv")
 
     p = plot4(tl,tr,bl,br)
     plot!(
@@ -185,10 +185,10 @@ end
 
 
 let
-    tl = ld("summary_benches/grouped_reduce_mean_allcols-chunksize1000000_uniquevals1000.csv")
-    bl = ld("summary_benches/grouped_reduce_mean_allcols-chunksize1000000_uniquevals10000.csv")
-    tr = ld("summary_benches/grouped_reduce_mean_allcols-chunksize10000000_uniquevals1000.csv")
-    br = ld("summary_benches/grouped_reduce_mean_allcols-chunksize10000000_uniquevals10000.csv")
+    tl = ld("summaries/grouped_reduce_mean_allcols-chunksize1000000_uniquevals1000.csv")
+    bl = ld("summaries/grouped_reduce_mean_allcols-chunksize1000000_uniquevals10000.csv")
+    tr = ld("summaries/grouped_reduce_mean_allcols-chunksize10000000_uniquevals1000.csv")
+    br = ld("summaries/grouped_reduce_mean_allcols-chunksize10000000_uniquevals10000.csv")
 
     p = plot4(tl,tr,bl,br)
     plot!(
@@ -200,10 +200,10 @@ let
 end
 
 let
-    tl = ld("summary_benches/grouped_reduce_mean_singlecol-chunksize1000000_uniquevals1000.csv")
-    bl = ld("summary_benches/grouped_reduce_mean_singlecol-chunksize1000000_uniquevals10000.csv")
-    tr = ld("summary_benches/grouped_reduce_mean_singlecol-chunksize10000000_uniquevals1000.csv")
-    br = ld("summary_benches/grouped_reduce_mean_singlecol-chunksize10000000_uniquevals10000.csv")
+    tl = ld("summaries/grouped_reduce_mean_singlecol-chunksize1000000_uniquevals1000.csv")
+    bl = ld("summaries/grouped_reduce_mean_singlecol-chunksize1000000_uniquevals10000.csv")
+    tr = ld("summaries/grouped_reduce_mean_singlecol-chunksize10000000_uniquevals1000.csv")
+    br = ld("summaries/grouped_reduce_mean_singlecol-chunksize10000000_uniquevals10000.csv")
 
     p = plot4(tl,tr,bl,br)
     plot!(
@@ -216,10 +216,10 @@ end
 
 
 let
-    tl = ld("summary_benches/groupby_reduce_mean_all-chunksize1000000_uniquevals1000.csv")
-    bl = ld("summary_benches/groupby_reduce_mean_all-chunksize1000000_uniquevals10000.csv")
-    tr = ld("summary_benches/groupby_reduce_mean_all-chunksize10000000_uniquevals1000.csv")
-    br = ld("summary_benches/groupby_reduce_mean_all-chunksize10000000_uniquevals10000.csv")
+    tl = ld("summaries/groupby_reduce_mean_all-chunksize1000000_uniquevals1000.csv")
+    bl = ld("summaries/groupby_reduce_mean_all-chunksize1000000_uniquevals10000.csv")
+    tr = ld("summaries/groupby_reduce_mean_all-chunksize10000000_uniquevals1000.csv")
+    br = ld("summaries/groupby_reduce_mean_all-chunksize10000000_uniquevals10000.csv")
 
     p = plot4(tl,tr,bl,br)
     plot!(

@@ -24,7 +24,7 @@ d2 = groupby(d1, [2,4,5,6])
 
 
 rm("plots", recursive=true, force=true); mkpath("plots")
-rm("summary_benches", recursive=true, force=true); mkpath("summary_benches")
+rm("summaries", recursive=true, force=true); mkpath("summaries")
 for k in keys(d2)
     println(k)
     name= "$(k.type)-chunksize$(string(k.chunksize))_uniquevals$(string(k.unique_vals))"
@@ -33,7 +33,7 @@ for k in keys(d2)
     x = unique(p.n)
     techs = sort(combine(p, :tech => unique).tech_unique)
     ys = [p[p.tech .== t, [:n, :time]] for t in techs]
-    @async CSV.write("summary_benches/"*name*".csv", p)
+    @async CSV.write("summaries/"*name*".csv", p)
     plot()
     for (i, t) in enumerate(techs)
         s = ys[i]
