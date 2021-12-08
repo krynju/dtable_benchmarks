@@ -2,6 +2,7 @@ using Distributed
 @everywhere using Pkg;
 @everywhere Pkg.activate(".");
 @everywhere using DataFrames
+@everywhere using Statistics
 
 filename_prefix = "dataframes_bench"
 include("common_stuff.jl")
@@ -23,20 +24,20 @@ w_test("filter_half", ffilter, d)
 
 
 fredall = (d) -> begin
-    combine(d, propertynames(d) .=> (x -> fit!(Variance(), x)))
+    combine(d, propertynames(d) .=> var)
 end
 w_test("reduce_var_all", fredall, d)
 
 
 fredsingle = (d) -> begin
-    combine(d, :a1 => (x -> fit!(Variance(), x)))
+    combine(d, :a1 => var)
 end
 w_test("reduce_var_single", fredsingle, d)
 
 
 
 # groupby_reduce_mean_all = (d) -> begin
-#     combine(groupby(d, :a1), propertynames(d) .=> (x -> fit!(Mean(), x)))
+#     combine(groupby(d, :a1), propertynames(d) .=> mean)
 # end
 # w_test("groupby_reduce_mean_all", groupby_reduce_mean_all, d)
 
@@ -57,13 +58,13 @@ GC.gc();GC.gc();
 
 
 grouped_reduce_mean_singlecol = (g) -> begin
-    r = combine(g, :a2 => (x -> fit!(Mean(), x)))
+    r = combine(g, :a2 => mean)
 end
 w_test("grouped_reduce_mean_singlecol", grouped_reduce_mean_singlecol, g)
 
 
 grouped_reduce_mean_allcols = (g) -> begin
-    combine(g, names(g) .=> (x -> fit!(Mean(), x)))
+    combine(g, names(g) .=> mean)
 end
 w_test("grouped_reduce_mean_allcols", grouped_reduce_mean_allcols, g)
 
