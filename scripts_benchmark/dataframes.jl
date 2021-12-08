@@ -17,7 +17,7 @@ end
 w_test("increment_map", fmap, d)
 
 ffilter = (d) -> begin
-    f = filter(row -> row.a1 < unique_values ÷ 2, d)
+    f = filter(:a1 => <(unique_values ÷ 2), d)
 end
 w_test("filter_half", ffilter, d)
 
