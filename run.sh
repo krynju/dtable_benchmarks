@@ -16,7 +16,8 @@ if [[ $workers -eq 1 ]]; then
     juliacmd="julia -t$threads"
     pythoncmd="python ${s}daskb.py 1 $threads"
 else
-    juliacmd="julia -p$(($workers-1)) -t$threads"
+    wm1=$((workers-1))
+    juliacmd="julia -p$wm1 -t$threads"
     pythoncmd="python ${s}daskb.py $workers $threads"
 fi
 
