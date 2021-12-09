@@ -1,5 +1,5 @@
 threads=16
-workers=0
+workers=1
 
 # chunksizes=('1000000')
 # ns=('100000')
@@ -16,8 +16,7 @@ if [[ $workers -eq 1 ]]; then
     juliacmd="julia -t$threads"
     pythoncmd="python ${s}daskb.py 1 $threads"
 else
-    wm1=$((workers-1))
-    juliacmd="julia -p$wm1 -t$threads"
+    juliacmd="julia -p$(($workers-1)) -t$threads"
     pythoncmd="python ${s}daskb.py $workers $threads"
 fi
 
